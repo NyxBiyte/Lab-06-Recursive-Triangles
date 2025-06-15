@@ -39,13 +39,28 @@ public class Triangle implements ResizableImage {
         gBuffer.drawRect(border, border, size.width - 2 * border, size.height - 2 * border);
         gBuffer.drawString("Triangle goes here", border * 2, border * 4);
 
-        // Triangle
-        int[] xPoints = {(size.width -border) / 2, border, size.width -border};
-        int[] yPoints = {border, size.height -border, size.height -border};
+        // equatorial triangle corner points
+        size.width -= border;
+        size.height -= border;
 
-        int maxDepth =10;
+        double min = Math.min(size.width, (2 / Math.sqrt(3)) * size.height);
+        double s = (Math.sqrt(3) / 2) * min;
 
-        // Start recursive
+
+        int y0 = (int)((size.height - s) / 2); // vertically centered
+        int[] xPoints = {(size.width / 2), (int)((size.width / 2) - min / 2), (int)((size.width / 2) + min / 2)};
+        int[] yPoints = {(int)((size.height - s) / 2), (int)(((size.height - s) / 2) + s), (int)(((size.height - s) / 2) + s)};
+
+
+        for (int i = 0; i < xPoints.length; i++) {
+            if ("0".equalsIgnoreCase(String.valueOf(xPoints[i]))) {
+                xPoints[i] += border;
+            }
+        }
+
+        int maxDepth =9;
+
+        // start recursive
         drawSierpinski(gBuffer, xPoints, yPoints, maxDepth, maxDepth);
 
 
@@ -53,24 +68,25 @@ public class Triangle implements ResizableImage {
     }
 
     private void drawSierpinski(Graphics2D g, int[] x, int[] y, int depth, int maxDepth) {
-        // Midpoints calculation
+        // midpoints calculation
         int x0 = (x[0] + x[1]) / 2;
         int y0 = (y[0] + y[1]) / 2;
         int x1 = (x[1] + x[2]) / 2;
-        int y1 = (y[1]);
+        int y1 = (y[1] + y[2]) / 2;
         int x2 = (x[2] + x[0]) / 2;
         int y2 = (y[2] + y[0]) / 2;
-        
-        //color according fo recursion depth
-        float tone = (float)(maxDepth - depth)/ 20;
-        g.setColor(Color.getHSBColor(tone, 1.0f, 1.0f));
-        g.fillPolygon(new int[]{x[0], x0, x2}, new int[]{y[2], y0, y2}, 3);
-        
-        if (depth == 0) {
+
+        if (depth != 0) {
+            //color according fo recursion depth
+            float tone = (float)(maxDepth - depth)/ 10;
+            g.setColor(Color.getHSBColor(tone, 1.0f, 1.0f));
+            g.fillPolygon(new int[]{x[0], x0, x2}, new int[]{y[2], y0, y2}, 3);
+        }else {
             g.setColor(Color.getHSBColor(maxDepth+1, 1.0f, 1.0f));
             g.fillPolygon(x, y, 3);
             return;
         }
+
 
         //drawSierpinski(g, new int[]{x[0], x0, x2}, new int[]{y[2], y0, y2}, depth - 1, maxDepth);
 
