@@ -1,11 +1,9 @@
 package triangle;
 
-import resizable.ResizableImage;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
 import static resizable.Debug.print;
+import resizable.ResizableImage;
 
 /**
  * Implement your Sierpinski Triangle here.
@@ -45,7 +43,7 @@ public class Triangle implements ResizableImage {
         int[] xPoints = {(size.width -border) / 2, border, size.width -border};
         int[] yPoints = {border, size.height -border, size.height -border};
 
-        int maxDepth =9;
+        int maxDepth =10;
 
         // Start recursive
         drawSierpinski(gBuffer, xPoints, yPoints, maxDepth, maxDepth);
@@ -58,23 +56,23 @@ public class Triangle implements ResizableImage {
      * Recursively draws the Sierpinski Triangle on the given Graphics2D context.
      */
     private void drawSierpinski(Graphics2D g, int[] x, int[] y, int depth, int maxDepth) {
-        //color according fo recursion depth
-        float hue = (float)(maxDepth - depth)/ maxDepth;
-        g.setColor(Color.getHSBColor(hue, 0.6f, 1.0f));
-        g.fillPolygon(x, y, 3);
-        if (depth == 0) {
-            g.setColor(Color.getHSBColor(hue, 1.6f, 1.0f));
-            g.fillPolygon(x, y, 3);
-            return;
-        }
-
         // Midpoints calculation
         int x0 = (x[0] + x[1]) / 2;
         int y0 = (y[0] + y[1]) / 2;
         int x1 = (x[1] + x[2]) / 2;
-        int y1 = (y[1] + y[2]) / 2;
+        int y1 = (y[1]);
         int x2 = (x[2] + x[0]) / 2;
         int y2 = (y[2] + y[0]) / 2;
+        
+        //color according fo recursion depth
+        float tone = (float)(maxDepth - depth)/ 20;
+        g.setColor(Color.getHSBColor(tone, 1.0f, 1.0f));
+        g.fillPolygon(new int[]{x[0], x0, x2}, new int[]{y[2], y0, y2}, 3);
+        if (depth == 0) {
+            g.setColor(Color.getHSBColor(maxDepth+1, 0.6f, 1.0f));
+            g.fillPolygon(x, y, 3);
+            return;
+        }
 
         //drawSierpinski(g, new int[]{x[0], x0, x2}, new int[]{y[2], y0, y2}, depth - 1, maxDepth);
 
