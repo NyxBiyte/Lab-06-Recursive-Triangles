@@ -52,9 +52,6 @@ public class Triangle implements ResizableImage {
         return bufferedImage;
     }
 
-    /**
-     * Recursively draws the Sierpinski Triangle on the given Graphics2D context.
-     */
     private void drawSierpinski(Graphics2D g, int[] x, int[] y, int depth, int maxDepth) {
         // Midpoints calculation
         int x0 = (x[0] + x[1]) / 2;
@@ -68,8 +65,9 @@ public class Triangle implements ResizableImage {
         float tone = (float)(maxDepth - depth)/ 20;
         g.setColor(Color.getHSBColor(tone, 1.0f, 1.0f));
         g.fillPolygon(new int[]{x[0], x0, x2}, new int[]{y[2], y0, y2}, 3);
+        
         if (depth == 0) {
-            g.setColor(Color.getHSBColor(maxDepth+1, 0.6f, 1.0f));
+            g.setColor(Color.getHSBColor(maxDepth+1, 1.0f, 1.0f));
             g.fillPolygon(x, y, 3);
             return;
         }
