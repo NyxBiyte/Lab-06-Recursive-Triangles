@@ -58,7 +58,7 @@ public class Triangle implements ResizableImage {
             }
         }
 
-        int maxDepth =9;
+        int maxDepth =15;
 
         // start recursive
         drawSierpinski(gBuffer, xPoints, yPoints, maxDepth, maxDepth);
@@ -68,6 +68,15 @@ public class Triangle implements ResizableImage {
     }
 
     private void drawSierpinski(Graphics2D g, int[] x, int[] y, int depth, int maxDepth) {
+        // test is triangle to small
+        boolean isNotTri = (x[0] == x[1] && y[0] == y[1]) ||
+                (x[1] == x[2] && y[1] == y[2]) ||
+                (x[2] == x[0] && y[2] == y[0]);
+
+        if (isNotTri) {
+            depth = 0;
+        }
+
         // midpoints calculation
         int x0 = (x[0] + x[1]) / 2;
         int y0 = (y[0] + y[1]) / 2;
@@ -78,7 +87,7 @@ public class Triangle implements ResizableImage {
 
         if (depth != 0) {
             //color according fo recursion depth
-            float tone = (float)(maxDepth - depth)/ 10;
+            float tone = (float)(maxDepth - depth)/ maxDepth;
             g.setColor(Color.getHSBColor(tone, 1.0f, 1.0f));
             g.fillPolygon(new int[]{x[0], x0, x2}, new int[]{y[2], y0, y2}, 3);
         }else {
